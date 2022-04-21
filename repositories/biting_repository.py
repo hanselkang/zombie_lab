@@ -1,7 +1,10 @@
 from db.run_sql import run_sql
+from models import human
+from models import zombie
 from models.human import Human
 from models.zombie import Zombie
 from models.biting import Biting
+from repositories import human_repository, zombie_repository
 
 def save(biting):
     sql = "INSERT INTO bitings (human_id, zombie_id) VALUES (%s, %s) RETURNING id"
@@ -10,12 +13,26 @@ def save(biting):
     biting.id = results[0]['id']
     return biting
 
+# def select_all():
+#     bitings = []
+#     sql = "SELECT * FROM bitings"
+#     results = run_sql(sql)
+#     for row in results:
+#         biting = Biting(row['id'],row['zombie_id'],row['human_id'])
+#         bitings.append(biting)
+#     return bitings
+
+
 def select_all():
     bitings = []
+
     sql = "SELECT * FROM bitings"
     results = run_sql(sql)
+
     for row in results:
-        biting = Biting(row['id'],row['zombie_id'],row['human_id'])
+        human = human_repository.select(row['human_id'])
+        zombie = zombie_repository.select(row['zombie_id'])
+        biting = Biting(human, zombie, row['id'])
         bitings.append(biting)
     return bitings
 
@@ -40,5 +57,29 @@ def delete(id):
     values = [id]
     run_sql(sql,values)
 
-def update():
-    
+def update(id):
+    sql = "UPDATE biting SET (human_id, zombie_id) = (%s,%s) WHERE id = %s"
+    values = [human.id, zombie.id, 'id']
+    run_sql(sql, values)
+
+def zombies(id):
+    zombies = []
+    sql = "SELECT zombies.* FROM zombies INNER JOIN bitings ON bitings.zombies_name = zombies.name WHERE id = %s"
+    values = [id]
+    results = run_sql(sql, values)
+    for row in results:
+        zombie = Zombie(row['name'], row['id'])
+        zombies.append(zombie)
+    return zombies
+
+
+def humans(id):
+    humans = []
+    sql = "SELECT humans.* FROM humans INNER JOIN bitings ON bitings.humans_name = humans.name WHERE id = %s"
+    values = [id]
+    results = run_sql(sql, values)
+    for row in results:
+        human = Human(row['name'], row['id'])
+        humans.append(human)
+
+    return humans

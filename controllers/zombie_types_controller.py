@@ -40,6 +40,7 @@ def update_zombie(id):
     name = request.form["name"]
     zombie_type = ZombieType(name, id)
     zombie_type_repository.update(zombie_type)
+    return redirect("/zombietypes")
 
 
 # DELETE
