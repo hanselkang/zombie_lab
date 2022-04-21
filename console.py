@@ -56,6 +56,8 @@ biting_repository.save(biting_3)
 biting_4 = Biting(human_4, zombie_2)
 biting_repository.save(biting_4)
 
+biting_repository.delete(41)
+
 # print(biting_repository.select_all()[0].id)
 
 # biting = biting_repository.select(34)
