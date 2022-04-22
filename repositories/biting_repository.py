@@ -25,10 +25,8 @@ def save(biting):
 
 def select_all():
     bitings = []
-
     sql = "SELECT * FROM bitings"
     results = run_sql(sql)
-
     for row in results:
         human = human_repository.select(row['human_id'])
         zombie = zombie_repository.select(row['zombie_id'])
@@ -62,24 +60,4 @@ def update(id):
     values = [human.id, zombie.id, 'id']
     run_sql(sql, values)
 
-def zombies(id):
-    zombies = []
-    sql = "SELECT zombies.* FROM zombies INNER JOIN bitings ON bitings.zombies_name = zombies.name WHERE id = %s"
-    values = [id]
-    results = run_sql(sql, values)
-    for row in results:
-        zombie = Zombie(row['name'], row['id'])
-        zombies.append(zombie)
-    return zombies
 
-
-def humans(id):
-    humans = []
-    sql = "SELECT humans.* FROM humans INNER JOIN bitings ON bitings.humans_name = humans.name WHERE id = %s"
-    values = [id]
-    results = run_sql(sql, values)
-    for row in results:
-        human = Human(row['name'], row['id'])
-        humans.append(human)
-
-    return humans
