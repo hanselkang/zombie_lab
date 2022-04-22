@@ -42,7 +42,6 @@ def update_zombie(id):
     zombie_type_repository.update(zombie_type)
     return redirect("/zombietypes")
 
-
 # DELETE
 @zombie_types_blueprint.route("/zombietypes/<id>/delete", methods=["POST"])
 def delete_zombie(id):

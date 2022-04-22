@@ -1,7 +1,9 @@
 from flask import Blueprint, Flask, redirect, render_template, request
-import models
+
 from models.biting import Biting
-from repositories import biting_repository, human_repository, zombie_repository
+import repositories.biting_repository as biting_repository
+import repositories.human_repository as human_repository
+import repositories.zombie_repository as zombie_repository
 
 bitings_blueprint = Blueprint("bitings", __name__)
 
@@ -13,6 +15,7 @@ def bitings():
     bitings = biting_repository.select_all()
     return render_template("bitings/index.html", bitings=bitings)
 
+
 # NEW
 
 
@@ -22,9 +25,8 @@ def new_biting():
     zombies = zombie_repository.select_all()
     return render_template("bitings/new.html", humans=humans, zombies=zombies)
 
+
 # CREATE
-
-
 @bitings_blueprint.route("/bitings", methods=["POST"])
 def create_biting():
     human_id = request.form["human_id"]
@@ -35,17 +37,20 @@ def create_biting():
     biting_repository.save(new_biting)
     return redirect("/bitings")
 
+
+# EDIT
+
+
 # EDIT
 @bitings_blueprint.route("/bitings/<id>/edit")
 def edit_biting(id):
     biting = biting_repository.select(id)
     humans = human_repository.select_all()
     zombies = zombie_repository.select_all()
-    return render_template('bitings/edit.html',biting=biting,humans=humans,zombies=zombies)
+    return render_template('bitings/edit.html', biting=biting, humans=humans, zombies=zombies)
+
 
 # UPDATE
-
-
 @bitings_blueprint.route("/bitings/<id>", methods=["POST"])
 def update_biting(id):
     human_id = request.form["human_id"]

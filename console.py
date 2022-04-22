@@ -56,16 +56,4 @@ biting_repository.save(biting_3)
 biting_4 = Biting(human_4, zombie_2)
 biting_repository.save(biting_4)
 
-# biting_repository.delete(41)
-
-print(biting_repository.select_all())
-
-# biting = biting_repository.select(34)
-# print(biting.__dict__)
-
-# bitings = human_repository.bitings(human_2)
-# for biting in bitings:
-#     print(biting.__dict__)
-
-
 # pdb.set_trace()
